@@ -36,6 +36,9 @@ func New(rootCmd *cobra.Command) *DocGen {
 		commands: make(map[*cobra.Command]*cmdInfo),
 		date:     time.Now().Format(timeFormat),
 		os:       "Application",
+		section:  1,
+		program:  "UTIL",
+		machine:  "Application",
 	}
 }
 
@@ -44,7 +47,7 @@ func (gen *DocGen) SetProgram(name string) {
 }
 
 func (gen *DocGen) SetSection(secNum int) error {
-	if secNum >= 1 && secNum <= 6 {
+	if secNum >= 1 && secNum <= 9 {
 		gen.section = secNum
 		return nil
 	}
