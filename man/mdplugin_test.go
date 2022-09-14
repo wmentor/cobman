@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/wmentor/cobman"
+	"github.com/wmentor/cobman/man"
 )
 
 func TestMdPlugin_Paragraph(t *testing.T) {
@@ -20,7 +20,7 @@ Package github\&.com/gomarkdown/markdown is a Go \fBlibrary\fR for parsing Markd
 .PP
 It's very fast and supports common extensions\&.`
 
-	res := cobman.Md2Man(txt)
+	res := man.Md2Man(txt)
 
 	require.Equal(t, wait, res)
 }
@@ -35,7 +35,7 @@ func TestMdPlugin_List(t *testing.T) {
 	2. Indented item
 4. Fourth item
 `
-	res := cobman.Md2Man(txt)
+	res := man.Md2Man(txt)
 
 	wait := ".RS 0\n.PP\nFirst item\n.RE\n.RS 0\n.PP\nSecond item\n.RE\n.RS 0\n.PP\nThird item\n.RS 4\n.PP\nIndented item\n.RE\n.RS 4\n.PP\nIndented item\n.RE\n.RE\n.RS 0\n.PP\nFourth item\n.RE\n"
 

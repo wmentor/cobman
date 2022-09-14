@@ -18,7 +18,7 @@ var (
 	}
 )
 
-func Escape(input []byte) []byte {
+func Escape(input string) string {
 	result := bytes.NewBuffer(nil)
 
 	for _, r := range string(input) {
@@ -29,10 +29,14 @@ func Escape(input []byte) []byte {
 		}
 	}
 
-	return result.Bytes()
+	return result.String()
 }
 
-func QuoteEscape(input []byte) []byte {
+func escapeBytes(input []byte) []byte {
+	return []byte(Escape(string(input)))
+}
+
+func QuoteEscape(input string) string {
 	result := bytes.NewBuffer(nil)
 
 	for _, r := range string(input) {
@@ -43,5 +47,5 @@ func QuoteEscape(input []byte) []byte {
 		}
 	}
 
-	return result.Bytes()
+	return result.String()
 }

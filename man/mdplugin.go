@@ -32,7 +32,7 @@ func (plugin *Plugin) RenderHeader(w io.Writer, ast ast.Node) {
 func (plugin *Plugin) RenderNode(w io.Writer, node ast.Node, entering bool) ast.WalkStatus {
 	switch node := node.(type) {
 	case *ast.Text:
-		w.Write(Escape(node.Literal))
+		w.Write(escapeBytes(node.Literal))
 		plugin.lastText = true
 	case *ast.Softbreak:
 	case *ast.Hardbreak:
@@ -55,7 +55,7 @@ func (plugin *Plugin) RenderNode(w io.Writer, node ast.Node, entering bool) ast.
 	case *ast.BlockQuote:
 	case *ast.Aside:
 	case *ast.Link:
-		w.Write(Escape(node.Literal))
+		w.Write(escapeBytes(node.Literal))
 		plugin.lastText = true
 	case *ast.CrossReference:
 	case *ast.Citation:
@@ -63,12 +63,12 @@ func (plugin *Plugin) RenderNode(w io.Writer, node ast.Node, entering bool) ast.
 		return ast.SkipChildren
 	case *ast.Code:
 		w.Write([]byte("\\fB\\fC"))
-		w.Write(Escape(node.Literal))
+		w.Write(escapeBytes(node.Literal))
 		w.Write([]byte("\\fR"))
 		plugin.lastText = true
 	case *ast.CodeBlock:
 		plugin.pushItem(w, ".PP\n.RS\n\n.nf")
-		w.Write(Escape(node.Literal))
+		w.Write(escapeBytes(node.Literal))
 		plugin.lastText = true
 		plugin.pushItem(w, ".fi\n.RE")
 	case *ast.Caption:
@@ -107,10 +107,10 @@ func (plugin *Plugin) RenderNode(w io.Writer, node ast.Node, entering bool) ast.
 	case *ast.Callout:
 	case *ast.Index:
 	case *ast.Subscript:
-		w.Write(Escape(node.Literal))
+		w.Write(escapeBytes(node.Literal))
 		plugin.lastText = true
 	case *ast.Superscript:
-		w.Write(Escape(node.Literal))
+		w.Write(escapeBytes(node.Literal))
 		plugin.lastText = true
 	case *ast.Footnotes:
 	default:

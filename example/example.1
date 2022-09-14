@@ -1,20 +1,45 @@
-.TH "MYCLI" "1" "23 March, 2016" "GNU Linux" "My simple util"
+.TH "MYCLI" "1" "2016-03-23" "GNU Linux" "My simple util"
 .SH "NAME"
+.PP
 mycli \- my little command line tool
 .SH "SYNOPSIS"
+.PP
 .sp
 .RS 0
-mycli
+mycli [\-\-param1|\-i int] [\-\-param2|\-b]
+.RE
+.sp
+.RS 0
+mycli subcmd1
 .RE
 .SH "DESCRIPTION"
-.sp
+.PP
 .PP
 Use the \&.Nm macro to refer to your program throughout the man page like
 such: Untitled, Underlining is accomplished with the \&.Ar macro like this:
-underlined text\&.
-.PP
-A list of items with descriptions:
+underlined text\&. A list of items with descriptions:
 .PP
 item a   Description of item a
 .PP
 item b   Description of item b
+.SH "ENVIRONMENT"
+.PP
+\fBMY_ETCD1\fR
+.RS 4
+.PP
+optional parameters that are not
+specific to the utility\&. They specify etcd connection settings, cluster
+name and a few more settings\&. By default shardmanctl tries to connect
+to the etcd store 127\&.0\&.0\&.1:2379 and use the cluster0 cluster name\&. The
+default log level is info\&.
+.RE
+.PP
+\fBMY_ETCD2\fR
+.RS 4
+.PP
+optional parameters that are not
+specific to the utility\&. They specify etcd connection settings, cluster
+name and a few more settings\&. By default shardmanctl tries to connect
+to the etcd store 127\&.0\&.0\&.1:2379 and use the cluster0 cluster name\&. The
+default log level is info\&.
+.RE
