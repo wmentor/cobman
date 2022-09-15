@@ -45,7 +45,15 @@ underlined text. A list of items with descriptions:
 
 item a   Description of item a
 
-item b   Description of item b`)
+item b   Description of item b
+
+1. listitem1 optional  parameters
+	1. listitem11
+	1. listitem22
+		1. 24214 42134 1234 12
+		1. 2314 21341 24 12
+1. listitem2
+1. listitem3`)
 
 	rootCmd.AddCommand(subCmd1)
 

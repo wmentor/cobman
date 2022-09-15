@@ -3,9 +3,14 @@ package man_test
 import (
 	"testing"
 
+	_ "embed"
+
 	"github.com/stretchr/testify/require"
 	"github.com/wmentor/cobman/man"
 )
+
+//go:embed list.txt
+var listWait string
 
 func TestMdPlugin_Paragraph(t *testing.T) {
 	t.Parallel()
@@ -37,7 +42,5 @@ func TestMdPlugin_List(t *testing.T) {
 `
 	res := man.Md2Man(txt)
 
-	wait := ".RS 0\n.PP\nFirst item\n.RE\n.RS 0\n.PP\nSecond item\n.RE\n.RS 0\n.PP\nThird item\n.RS 4\n.PP\nIndented item\n.RE\n.RS 4\n.PP\nIndented item\n.RE\n.RE\n.RS 0\n.PP\nFourth item\n.RE\n"
-
-	require.Equal(t, wait, res)
+	require.Equal(t, listWait, res)
 }

@@ -14,13 +14,14 @@ var (
 )
 
 type Plugin struct {
-	listLevel int
-	lastText  bool
+	listLevel     int
+	lastText      bool
+	beginListItem bool
 }
 
 func NewPlugin() *Plugin {
 	return &Plugin{
-		listLevel: -1,
+		listLevel: 0,
 	}
 }
 
@@ -78,7 +79,10 @@ func (plugin *Plugin) RenderNode(w io.Writer, node ast.Node, entering bool) ast.
 	case *ast.Document:
 	case *ast.Paragraph:
 		if entering {
-			plugin.pushItem(w, ".PP")
+			if !plugin.beginListItem {
+				plugin.pushItem(w, ".PP")
+			}
+			plugin.beginListItem = false
 		}
 	case *ast.HTMLSpan:
 	case *ast.HTMLBlock:
@@ -91,11 +95,16 @@ func (plugin *Plugin) RenderNode(w io.Writer, node ast.Node, entering bool) ast.
 			plugin.listLevel--
 		}
 	case *ast.ListItem:
-		str := fmt.Sprintf(".RS %d", plugin.listLevel*4)
+		str := fmt.Sprintf(".sp\n.RS %d\n.ie n \\{\\\n\\h'-04'\\(bu\\h'+03'\\c\n.\\}\n.el \\{\\\n.sp -1\n.IP \\(bu 2.3\n.\\}", plugin.listLevel*4)
+		plugin.beginListItem = true
 		if !entering {
 			str = ".RE"
+			plugin.beginListItem = false
 		}
 		plugin.pushItem(w, str)
+		if entering {
+			w.Write([]byte("\\(bu"))
+		}
 	case *ast.Table:
 		return ast.SkipChildren
 	case *ast.TableCell:
