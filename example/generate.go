@@ -18,9 +18,16 @@ func main() {
 
 	var rootParam1 int
 	var rootParam2 bool
+	var rootCommonParam1 int
+	var rootCommonParam2 int
 
 	rootCmd.Flags().IntVarP(&rootParam1, "param1", "i", 0, "first parameter (timer)")
 	rootCmd.Flags().BoolVarP(&rootParam2, "param2", "b", false, "my second parameter")
+
+	rootCmd.PersistentFlags().IntVarP(&rootCommonParam1, "seconds", "s", 0, "seconds")
+	cobman.SetPersistentFlagValueName(rootCmd, "seconds", "seconds")
+
+	rootCmd.PersistentFlags().IntVar(&rootCommonParam2, "some-flag", 0, "second common flag")
 
 	rootCmd.CompletionOptions.DisableDescriptions = true
 
@@ -58,6 +65,10 @@ specific to the utility. They specify etcd connection settings, cluster
 name and a few more settings. By default shardmanctl tries to connect
 to the etcd store 127.0.0.1:2379 and use the cluster0 cluster name. The
 default log level is info.`)
+
+	cobman.SeeAlso("groff", 1)
+	cobman.SeeAlso("man", 7)
+	cobman.SeeAlso("man-pages", 7)
 
 	ioutil.WriteFile("./example.1", cobman.MakeMan(rootCmd), 0644)
 }

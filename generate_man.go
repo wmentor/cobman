@@ -18,9 +18,63 @@ func MakeMan(rootCmd *cobra.Command) []byte {
 	manWriteName(buffer, rootCmd)
 	manWriteSynopsis(buffer, rootCmd)
 	manWriteDescription(buffer, rootCmd)
+	manWriteCommonFlags(buffer, rootCmd)
 	manWriteEnvs(buffer)
+	manWriteSeeAlso(buffer)
 
 	return buffer.Bytes()
+}
+
+func manWriteCommonFlags(buffer *bytes.Buffer, rootCmd *cobra.Command) {
+	buffer.WriteString(".SH \"COMMON OPTIONS\"\n")
+
+	buffer.WriteString(".PP\n")
+	buffer.WriteString("\\fB")
+	buffer.WriteString(man.Escape("--help, -h"))
+	buffer.WriteString("\\fR\n")
+	buffer.WriteString(".RS 4\n")
+	buffer.WriteString(man.Escape("Show brief usage information."))
+	buffer.WriteString("\n.RE\n")
+
+	if rootCmd.PersistentFlags().HasFlags() {
+		rootCmd.PersistentFlags().VisitAll(func(f *pflag.Flag) {
+			if f.Hidden || f.Deprecated != "" {
+				return
+			}
+
+			buffer.WriteString(".PP\n")
+			buffer.WriteString("\\fB")
+			buffer.WriteString("\\-\\-")
+			buffer.WriteString(man.Escape(f.Name))
+			if f.ShorthandDeprecated == "" && f.Shorthand != "" {
+				buffer.WriteString(", ")
+				buffer.WriteString("\\-")
+				buffer.WriteString(man.Escape(f.Shorthand))
+			}
+			buffer.WriteString("\\fR")
+
+			if v := getFlagValueName(f); v != "" {
+				buffer.WriteRune(' ')
+				buffer.WriteString("\\fI")
+				buffer.WriteString(man.Escape(v))
+				buffer.WriteString("\\fR")
+			}
+
+			buffer.WriteString("\n.RS 4\n")
+			buffer.WriteString(man.Escape(f.Usage))
+			buffer.WriteString("\n.RE\n")
+		})
+	}
+
+	if rootCmd.Version != "" {
+		buffer.WriteString(".PP\n")
+		buffer.WriteString("\\fB")
+		buffer.WriteString(man.Escape("--version, -v"))
+		buffer.WriteString("\\fR\n")
+		buffer.WriteString(".RS 4\n")
+		buffer.WriteString(man.Escape("Show shardman-utils version information."))
+		buffer.WriteString("\n.RE\n")
+	}
 }
 
 func manWriteTH(buffer *bytes.Buffer, rootCmd *cobra.Command) {
@@ -66,7 +120,6 @@ func manWriteSingleDescription(cmd *cobra.Command, isRoot bool) string {
 			buffer.WriteString(man.QuoteEscape(path))
 			buffer.WriteString("\"\n")
 		}
-		buffer.WriteString(".PP\n")
 		buffer.WriteString(man.Md2Man(val))
 		buffer.WriteString("\n")
 	}
@@ -84,6 +137,36 @@ func manWriteSynopsis(buffer *bytes.Buffer, cmd *cobra.Command) {
 	buffer.WriteString(".SH \"SYNOPSIS\"\n.PP\n")
 
 	manEachCommandSynopsis(buffer, cmd, "")
+}
+
+func manWriteSeeAlso(buffer *bytes.Buffer) {
+	if len(seeAlso) == 0 {
+		return
+	}
+
+	buffer.WriteString(".SH \"SEE ALSO\"\n")
+	buffer.WriteString(".PP\n")
+
+	names := make([]string, 0, len(seeAlso))
+	for name := range seeAlso {
+		names = append(names, name)
+	}
+
+	sort.Strings(names)
+
+	for i, name := range names {
+		if i > 0 {
+			buffer.WriteString(", ")
+		}
+		buffer.WriteString("\\fB")
+		buffer.WriteString(man.Escape(name))
+		buffer.WriteString("\\fR")
+		buffer.WriteRune('(')
+		buffer.WriteString(man.Escape(strconv.Itoa(seeAlso[name])))
+		buffer.WriteRune(')')
+	}
+
+	buffer.WriteRune('\n')
 }
 
 func manWriteEnvs(buffer *bytes.Buffer) {
@@ -120,11 +203,11 @@ func manEachCommandSynopsis(buf *bytes.Buffer, curCmd *cobra.Command, prefix str
 	commonFlags := ""
 
 	if prefix != "" {
-		prefix = prefix + " " + curCmd.Name()
+		prefix = prefix + " \\fB" + curCmd.Name() + "\\fR"
 	} else {
-		prefix = curCmd.Name()
+		prefix = "\\fB" + curCmd.Name() + "\\fR"
 		if curCmd.PersistentFlags().HasFlags() {
-			prefix = prefix + " [common_flags]"
+			prefix = prefix + " [\\fIcommon_options\\fR]"
 			commonFlags, _ = manMakeSynopsisFlagList(curCmd.PersistentFlags())
 		}
 	}
@@ -145,8 +228,7 @@ func manEachCommandSynopsis(buf *bytes.Buffer, curCmd *cobra.Command, prefix str
 	}
 
 	if commonFlags != "" {
-		buf.WriteString(".PP\n")
-		buf.WriteString("Here common_options are:\n.PP\n")
+		buf.WriteString(".PP\n.RS 12\nHere \\fIcommon_options\\fR are:\n.RE\n.PP\n")
 		buf.WriteString(commonFlags)
 		buf.WriteString("\n")
 	}
@@ -168,20 +250,29 @@ func manMakeSynopsisFlagList(fl *pflag.FlagSet) (string, bool) {
 			maker.WriteRune(' ')
 		}
 		maker.WriteRune('[')
-		maker.WriteString("--")
-		maker.WriteString(f.Name)
-		if f.ShorthandDeprecated == "" {
+		maker.WriteString("\\fB\\-\\-")
+		maker.WriteString(man.Escape(f.Name))
+		if f.ShorthandDeprecated == "" && f.Shorthand != "" {
 			maker.WriteRune('|')
-			maker.WriteString("-")
-			maker.WriteString(f.Shorthand)
+			maker.WriteString("\\-")
+			maker.WriteString(man.Escape(f.Shorthand))
 		}
+		maker.WriteString("\\fR")
 
 		if v := getFlagValueName(f); v != "" {
 			maker.WriteRune(' ')
-			maker.WriteString(v)
+			maker.WriteString("\\fI")
+			maker.WriteString(man.Escape(v))
+			maker.WriteString("\\fR")
 		}
 		maker.WriteRune(']')
 	})
 
-	return man.Escape(maker.String()), true
+	if maker.Len() > 0 {
+		maker.WriteRune(' ')
+	}
+
+	maker.WriteString("[\\fB\\-\\-help|\\-h\\fR]")
+
+	return maker.String(), true
 }

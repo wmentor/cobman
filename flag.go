@@ -9,6 +9,10 @@ func SetFlagValueName(cmd *cobra.Command, flag string, name string) {
 	cmd.Flags().SetAnnotation(flag, keyFlagValueName, []string{name})
 }
 
+func SetPersistentFlagValueName(cmd *cobra.Command, flag string, name string) {
+	cmd.PersistentFlags().SetAnnotation(flag, keyFlagValueName, []string{name})
+}
+
 func getFlagValueName(f *pflag.Flag) string {
 	if f.Annotations != nil {
 		if val, has := f.Annotations[keyFlagValueName]; has && len(val) == 1 && val[0] != "" {

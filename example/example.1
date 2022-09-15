@@ -6,14 +6,19 @@ mycli \- my little command line tool
 .PP
 .sp
 .RS 0
-mycli [\-\-param1|\-i int] [\-\-param2|\-b]
+\fBmycli\fR [\fIcommon_options\fR] [\fB\-\-param1|\-i\fR \fIint\fR] [\fB\-\-param2|\-b\fR] [\fB\-\-help|\-h\fR]
 .RE
 .sp
 .RS 0
-mycli subcmd1
+\fBmycli\fR [\fIcommon_options\fR] \fBsubcmd1\fR
 .RE
-.SH "DESCRIPTION"
 .PP
+.RS 8
+Here \fIcommon_options\fR are:
+.RE
+.PP
+[\fB\-\-seconds|\-s\fR \fIseconds\fR] [\fB\-\-some\-flag\fR \fIint\fR] [\fB\-\-help|\-h\fR]
+.SH "DESCRIPTION"
 .PP
 Use the \&.Nm macro to refer to your program throughout the man page like
 such: Untitled, Underlining is accomplished with the \&.Ar macro like this:
@@ -22,6 +27,22 @@ underlined text\&. A list of items with descriptions:
 item a   Description of item a
 .PP
 item b   Description of item b
+.SH "COMMON OPTIONS"
+.PP
+\fB\-\-help, \-h\fR
+.RS 4
+Show brief usage information\&.
+.RE
+.PP
+\fB\-\-seconds, \-s\fR \fIseconds\fR
+.RS 4
+seconds
+.RE
+.PP
+\fB\-\-some\-flag\fR \fIint\fR
+.RS 4
+second common flag
+.RE
 .SH "ENVIRONMENT"
 .PP
 \fBMY_ETCD1\fR
@@ -43,3 +64,6 @@ name and a few more settings\&. By default shardmanctl tries to connect
 to the etcd store 127\&.0\&.0\&.1:2379 and use the cluster0 cluster name\&. The
 default log level is info\&.
 .RE
+.SH "SEE ALSO"
+.PP
+\fBgroff\fR(1), \fBman\fR(7), \fBman\-pages\fR(7)
