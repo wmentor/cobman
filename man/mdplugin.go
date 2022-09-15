@@ -102,9 +102,6 @@ func (plugin *Plugin) RenderNode(w io.Writer, node ast.Node, entering bool) ast.
 			plugin.beginListItem = false
 		}
 		plugin.pushItem(w, str)
-		if entering {
-			w.Write([]byte("\\(bu"))
-		}
 	case *ast.Table:
 		return ast.SkipChildren
 	case *ast.TableCell:

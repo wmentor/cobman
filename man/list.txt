@@ -7,7 +7,7 @@
 .sp -1
 .IP \(bu 2.3
 .\}
-\(buFirst item
+First item
 .RE
 .sp
 .RS 4
@@ -18,7 +18,7 @@
 .sp -1
 .IP \(bu 2.3
 .\}
-\(buSecond item
+Second item
 .RE
 .sp
 .RS 4
@@ -29,7 +29,7 @@
 .sp -1
 .IP \(bu 2.3
 .\}
-\(buThird item
+Third item
 .sp
 .RS 8
 .ie n \{\
@@ -39,7 +39,7 @@
 .sp -1
 .IP \(bu 2.3
 .\}
-\(buIndented item
+Indented item
 .RE
 .sp
 .RS 8
@@ -50,7 +50,7 @@
 .sp -1
 .IP \(bu 2.3
 .\}
-\(buIndented item
+Indented item
 .RE
 .RE
 .sp
@@ -62,5 +62,5 @@
 .sp -1
 .IP \(bu 2.3
 .\}
-\(buFourth item
+Fourth item
 .RE
