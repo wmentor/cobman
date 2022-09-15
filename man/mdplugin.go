@@ -1,6 +1,7 @@
 package man
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 
@@ -62,15 +63,16 @@ func (plugin *Plugin) RenderNode(w io.Writer, node ast.Node, entering bool) ast.
 	case *ast.Image:
 		return ast.SkipChildren
 	case *ast.Code:
-		w.Write([]byte("\\fB\\fC"))
+		w.Write([]byte("\\fB"))
 		w.Write(escapeBytes(node.Literal))
 		w.Write([]byte("\\fR"))
 		plugin.lastText = true
 	case *ast.CodeBlock:
-		plugin.pushItem(w, ".PP\n.RS\n\n.nf")
-		w.Write(escapeBytes(node.Literal))
+		plugin.pushItem(w, ".PP")
+		w.Write([]byte("\\fB"))
+		w.Write(escapeBytes(bytes.TrimSpace(node.Literal)))
+		w.Write([]byte("\\fR"))
 		plugin.lastText = true
-		plugin.pushItem(w, ".fi\n.RE")
 	case *ast.Caption:
 	case *ast.CaptionFigure:
 	case *ast.Document:

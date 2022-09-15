@@ -21,8 +21,8 @@ func main() {
 	var rootCommonParam1 int
 	var rootCommonParam2 int
 
-	rootCmd.Flags().IntVarP(&rootParam1, "param1", "i", 0, "first parameter (timer)")
-	rootCmd.Flags().BoolVarP(&rootParam2, "param2", "b", false, "my second parameter")
+	rootCmd.Flags().IntVarP(&rootParam1, "param1", "b", 0, "first parameter (timer)")
+	rootCmd.Flags().BoolVarP(&rootParam2, "interactive", "i", false, "run command in interactive mode")
 
 	rootCmd.PersistentFlags().IntVarP(&rootCommonParam1, "seconds", "s", 0, "seconds")
 	cobman.SetPersistentFlagValueName(rootCmd, "seconds", "seconds")
@@ -65,6 +65,9 @@ specific to the utility. They specify etcd connection settings, cluster
 name and a few more settings. By default shardmanctl tries to connect
 to the etcd store 127.0.0.1:2379 and use the cluster0 cluster name. The
 default log level is info.`)
+
+	cobman.AddCommandExample(rootCmd, "Interactive mode", "```\nmycli -i\n```\nThis command runs the **mycli** in interactive mode")
+	cobman.AddCommandExample(rootCmd, "Get command help", "```\nmycli -h\n```\nIt will display help on how to use the command")
 
 	cobman.SeeAlso("groff", 1)
 	cobman.SeeAlso("man", 7)

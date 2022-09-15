@@ -1,17 +1,39 @@
 package cobman
 
 import (
+	"bytes"
+	"encoding/json"
+	"strings"
+
 	"github.com/spf13/cobra"
 )
+
+type exampleObject struct {
+	Title string `json:"title"`
+	Text  string `json:"text"`
+}
 
 func SetCommandDescription(cmd *cobra.Command, descriptionMarkdown string) {
 	makeCommandAnnotationsIfNotExists(cmd)
 	cmd.Annotations[keyCmdDescription] = descriptionMarkdown
 }
 
-func SetCommandExample(cmd *cobra.Command, exampleMarkDown string) {
+func AddCommandExample(cmd *cobra.Command, title string, exampleMarkDown string) {
+	list := append(getCommandExample(cmd), exampleObject{Title: title, Text: exampleMarkDown})
+	buf := bytes.NewBuffer(nil)
+	json.NewEncoder(buf).Encode(list)
+	cmd.Annotations[keyCmdExample] = buf.String()
+}
+
+func getCommandExample(cmd *cobra.Command) []exampleObject {
 	makeCommandAnnotationsIfNotExists(cmd)
-	cmd.Annotations[keyCmdExample] = exampleMarkDown
+	list := []exampleObject{}
+	if val, has := cmd.Annotations[keyCmdExample]; has {
+		if err := json.NewDecoder(strings.NewReader(val)).Decode(&list); err != nil {
+			list = []exampleObject{}
+		}
+	}
+	return list
 }
 
 func makeCommandAnnotationsIfNotExists(cmd *cobra.Command) {

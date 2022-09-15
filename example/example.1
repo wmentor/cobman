@@ -6,14 +6,14 @@ mycli \- my little command line tool
 .PP
 .sp
 .RS 0
-\fBmycli\fR [\fIcommon_options\fR] [\fB\-\-param1|\-i\fR \fIint\fR] [\fB\-\-param2|\-b\fR] [\fB\-\-help|\-h\fR]
+\fBmycli\fR [\fIcommon_options\fR] [\fB\-\-interactive|\-i\fR] [\fB\-\-param1|\-b\fR \fIint\fR] [\fB\-\-help|\-h\fR]
 .RE
 .sp
 .RS 0
 \fBmycli\fR [\fIcommon_options\fR] \fBsubcmd1\fR
 .RE
 .PP
-.RS 8
+.RS 12
 Here \fIcommon_options\fR are:
 .RE
 .PP
@@ -63,6 +63,24 @@ specific to the utility\&. They specify etcd connection settings, cluster
 name and a few more settings\&. By default shardmanctl tries to connect
 to the etcd store 127\&.0\&.0\&.1:2379 and use the cluster0 cluster name\&. The
 default log level is info\&.
+.RE
+.SH "EXAMPLES"
+.PP
+\fBInteractive mode\fR
+.RS 4
+.PP
+\fBmycli \-i\fR
+.PP
+This command runs the \fBmycli\fR in interactive mode
+.RE
+.sp
+.PP
+\fBGet command help\fR
+.RS 4
+.PP
+\fBmycli \-h\fR
+.PP
+It will display help on how to use the command
 .RE
 .SH "SEE ALSO"
 .PP

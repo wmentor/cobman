@@ -20,6 +20,7 @@ func MakeMan(rootCmd *cobra.Command) []byte {
 	manWriteDescription(buffer, rootCmd)
 	manWriteCommonFlags(buffer, rootCmd)
 	manWriteEnvs(buffer)
+	manWriteExample(buffer, rootCmd)
 	manWriteSeeAlso(buffer)
 
 	return buffer.Bytes()
@@ -126,7 +127,44 @@ func manWriteSingleDescription(cmd *cobra.Command, isRoot bool) string {
 
 	for _, childCmd := range cmd.Commands() {
 		if val := manWriteSingleDescription(childCmd, false); val != "" {
-			buffer.WriteString("\n")
+			buffer.WriteString(val)
+		}
+	}
+
+	return buffer.String()
+}
+
+func manWriteExample(buffer *bytes.Buffer, rootCmd *cobra.Command) {
+	if val := manWriteSingleCommandExampes(rootCmd); val != "" {
+		buffer.WriteString(".SH \"EXAMPLES\"\n")
+		buffer.WriteString(val)
+	}
+}
+
+func manWriteSingleCommandExampes(cmd *cobra.Command) string {
+	buffer := strings.Builder{}
+
+	if cmd.Hidden {
+		return ""
+	}
+
+	for i, example := range getCommandExample(cmd) {
+		if i > 0 {
+			buffer.WriteString(".sp\n")
+		}
+		buffer.WriteString(".PP\n\\fB")
+		buffer.WriteString(man.Escape(example.Title))
+		buffer.WriteString("\\fR\n.RS 4\n")
+		buffer.WriteString(man.Md2Man(example.Text))
+		buffer.WriteString("\n.RE\n")
+	}
+
+	for _, childCmd := range cmd.Commands() {
+		if val := manWriteSingleCommandExampes(childCmd); val != "" {
+			if buffer.Len() > 0 {
+				buffer.WriteString(".sp\n")
+			}
+			buffer.WriteString(val)
 		}
 	}
 
