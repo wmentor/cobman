@@ -43,17 +43,22 @@ func main() {
 such: Untitled, Underlining is accomplished with the .Ar macro like this:
 underlined text. A list of items with descriptions:
 
-item a   Description of item a
-
-item b   Description of item b
-
 1. listitem1 optional  parameters
 	1. listitem11
 	1. listitem22
 		1. 24214 42134 1234 12
 		1. 2314 21341 24 12
 1. listitem2
-1. listitem3`)
+1. listitem3
+
+And code block:
+
+`+"```json"+`
+{
+	"id": 123132,
+	"name": "Mikhail K."
+}
+`+"```\n")
 
 	rootCmd.AddCommand(subCmd1)
 

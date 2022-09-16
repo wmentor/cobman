@@ -23,10 +23,6 @@ Here \fIcommon_options\fR are:
 Use the \&.Nm macro to refer to your program throughout the man page like
 such: Untitled, Underlining is accomplished with the \&.Ar macro like this:
 underlined text\&. A list of items with descriptions:
-.PP
-item a   Description of item a
-.PP
-item b   Description of item b
 .sp
 .RS 4
 .ie n \{\
@@ -104,6 +100,13 @@ listitem2
 .\}
 listitem3
 .RE
+.PP
+And code block:
+.PP
+ \fB{
+ 	"id": 123132,
+ 	"name": "Mikhail K\&."
+ }\fR
 
 .SH "COMMON OPTIONS"
 .PP
@@ -147,7 +150,8 @@ default log level is info\&.
 \fBInteractive mode\fR
 .RS 4
 .PP
-\fBmycli \-i\fR
+ \fBmycli \-i\fR
+
 .PP
 This command runs the \fBmycli\fR in interactive mode
 .RE
@@ -156,7 +160,8 @@ This command runs the \fBmycli\fR in interactive mode
 \fBGet command help\fR
 .RS 4
 .PP
-\fBmycli \-h\fR
+ \fBmycli \-h\fR
+
 .PP
 It will display help on how to use the command
 .RE

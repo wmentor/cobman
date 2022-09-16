@@ -70,9 +70,9 @@ func (plugin *Plugin) RenderNode(w io.Writer, node ast.Node, entering bool) ast.
 		plugin.lastText = true
 	case *ast.CodeBlock:
 		plugin.pushItem(w, ".PP")
-		w.Write([]byte("\\fB"))
-		w.Write(escapeBytes(bytes.TrimSpace(node.Literal)))
-		w.Write([]byte("\\fR"))
+		w.Write([]byte(" \\fB"))
+		w.Write(escapeBytes(bytes.ReplaceAll(bytes.TrimSpace(node.Literal), []byte("\n"), []byte("\n "))))
+		w.Write([]byte("\\fR\n"))
 		plugin.lastText = true
 	case *ast.Caption:
 	case *ast.CaptionFigure:

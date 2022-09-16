@@ -1,6 +1,7 @@
 package man_test
 
 import (
+	"os"
 	"testing"
 
 	_ "embed"
@@ -8,9 +9,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/wmentor/cobman/man"
 )
-
-//go:embed list.txt
-var listWait string
 
 func TestMdPlugin_Paragraph(t *testing.T) {
 	t.Parallel()
@@ -42,5 +40,28 @@ func TestMdPlugin_List(t *testing.T) {
 `
 	res := man.Md2Man(txt)
 
-	require.Equal(t, listWait, res)
+	listWait, err := os.ReadFile("./testdata/list.txt")
+	require.NoError(t, err)
+
+	require.Equal(t, string(listWait), res)
+}
+
+func TestMdPlugin_CodeBlock(t *testing.T) {
+	t.Parallel()
+
+	txt := "```\n" + `
+{
+	"ID": 123123,
+	"Name": "Mikhail K."
+}
+` + "```" + `
+json example
+`
+
+	res := man.Md2Man(txt)
+
+	listWait, err := os.ReadFile("./testdata/code.txt")
+	require.NoError(t, err)
+
+	require.Equal(t, string(listWait), res)
 }

@@ -1,0 +1,8 @@
+.PP
+ \fB{
+ 	"ID": 123123,
+ 	"Name": "Mikhail K\&."
+ }\fR
+
+.PP
+json example
