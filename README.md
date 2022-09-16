@@ -1,4 +1,4 @@
-= cobman
+# Cobman
 
 ![test](https://github.com/wmentor/cobman/workflows/test/badge.svg)
 [![https://goreportcard.com/report/github.com/wmentor/cobman](https://goreportcard.com/badge/github.com/wmentor/cobman)](https://goreportcard.com/report/github.com/wmentor/cobman)
