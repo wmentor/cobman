@@ -208,27 +208,21 @@ func manWriteSeeAlso(buffer *bytes.Buffer) {
 }
 
 func manWriteEnvs(buffer *bytes.Buffer) {
-	if len(envMap) == 0 {
+	envList := envStorage.List()
+
+	if len(envList) == 0 {
 		return
 	}
 
 	buffer.WriteString(".SH \"ENVIRONMENT\"\n")
 
-	names := make([]string, 0, len(envMap))
-
-	for name := range envMap {
-		names = append(names, name)
-	}
-
-	sort.Strings(names)
-
-	for _, env := range names {
+	for _, env := range envList {
 		buffer.WriteString(".PP\n")
 		buffer.WriteString("\\fB")
-		buffer.WriteString(man.Escape(env))
+		buffer.WriteString(man.Escape(env.Name))
 		buffer.WriteString("\\fR\n")
 		buffer.WriteString(".RS 4\n")
-		buffer.WriteString(man.Md2Man(envMap[env]))
+		buffer.WriteString(man.Md2Man(env.Description))
 		buffer.WriteString("\n.RE\n")
 	}
 }

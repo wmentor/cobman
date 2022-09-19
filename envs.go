@@ -1,9 +1,13 @@
 package cobman
 
+import (
+	"github.com/wmentor/cobman/envs"
+)
+
 var (
-	envMap = map[string]string{}
+	envStorage = envs.NewStorage()
 )
 
 func SetEnv(name string, description string) {
-	envMap[name] = description
+	envStorage.Set(name, description)
 }
